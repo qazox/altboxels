@@ -35,10 +35,17 @@ function Canvas(width, height, upscale) {
         that.pageX = e.pageX;
         that.pageY = e.pageY;
     })
+    this.elem.addEventListener('mouseover', function (e) {
+        that.isMouseOver = true;
+    })
+    this.elem.addEventListener('mouseout', function (e) {
+        that.isMouseOver = false;
+    })
 
     this.elem.addEventListener('wheel', function (e) {
         that.radius += Math.sign(e.deltaY);
         if (that.radius < 0) that.radius = 0;
+        e.preventDefault();
     })
 
     this.elem.addEventListener('mouseup', function (e) {
@@ -72,10 +79,16 @@ Canvas.prototype.setBlock = function (x, y, block, doTemp) {
 Canvas.prototype.resize = function () {
     this.elem.style.width = this.width * this.upscale + 'px';
     this.elem.style.height = this.height * this.upscale + 'px';
-
+    
     this.elem.width = this.width;
     this.elem.height = this.height;
-
+    
+    if(document.querySelector("#game") !== null)
+        document.querySelector("#game").setAttribute("style", `
+            width: ${this.width * this.upscale}px;
+            height: ${this.height * this.upscale}px;
+        `);
+    
     this.render();
 }
 
@@ -130,16 +143,21 @@ Canvas.prototype.render = function () {
         document.querySelector('body').id = 'no-overflow';
         return;
     }
-
-    let x = (this.pageX - this.elem.getBoundingClientRect().x - scrollX + this.x) - 0.5 - this.radius * this.upscale;
-    let y = (this.pageY - this.elem.getBoundingClientRect().y - scrollY + this.y) - 0.5 - this.radius * this.upscale;
-
+    
+    if(this.forceShowTilePlacement == true) {
+        var x = (this.width / 2 - this.radius) * this.upscale;
+        var y = (this.height / 2 - this.radius) * this.upscale;
+    } else {
+        var x = (this.pageX - this.elem.getBoundingClientRect().x - scrollX + this.x) - 0.5 - this.radius * this.upscale;
+        var y = (this.pageY - this.elem.getBoundingClientRect().y - scrollY + this.y) - 0.5 - this.radius * this.upscale;
+    }
     
     this.ctx.globalAlpha = 1;
 
     this.ctx.strokeStyle = 'rgb(255,255,255)';
     this.ctx.lineWidth = 2;
-    this.ctx.strokeRect(x / this.upscale, y / this.upscale, this.radius * 2 + 2, this.radius * 2  + 2);
+    if(this.isMouseOver || this.forceShowTilePlacement)
+        this.ctx.strokeRect(x / this.upscale, y / this.upscale, this.radius * 2 + 2, this.radius * 2  + 2);
 
     let theX = Math.floor(x/this.upscale  + this.radius + 1);
     let theY = Math.floor(y/this.upscale   + this.radius + 1);
@@ -149,10 +167,11 @@ Canvas.prototype.render = function () {
     let blok = mainTiles.tiles[this.getBlock(theX, theY)];
     let temp = this.getBlock(theX,theY, true);
 
-    if (blok) {
-        document.querySelector('.info').textContent = `${blok.namespace}; ${blok.id}; ${Math.round(temp+23)}deg Celsius`
+    if (blok && this.isMouseOver) {
+        document.querySelector('.info').textContent = `
+        Looking at ${blok.id} from ${blok.namespace}. Temperature at tile: ${Math.round(temp+23)}deg Celsius`
     } else {
-        document.querySelector('.info').textContent = `Unknown`
+        document.querySelector('.info').textContent = ``
     }
   
 }
