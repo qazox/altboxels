@@ -15,41 +15,85 @@
 </head>
 
 <body>
-    <h1>Altboxels</h1>
-    <canvas id='main' style=""></canvas>
-    <canvas id='alt' style='display: none;'></canvas>
-
-    <span class='info'>
-        N/A
-    </span>
-
-    <div class='menu2'> 
-        <section>
+    <div id="header">
+        <div id="header-title">Altboxels</div>
+        
+        <div id="header-links">
             <a href='https://discord.gg/wtBVte4Syu'>Chat</a>
             <a href='https://github.com/qazox/altboxels'>Source</a>
             <a href='https://altboxels.qazox.dev/'>Website</a>
             <a href='https://abc.qazox.dev/'>Community</a>
-        </section>
-        <section>
-            <button onclick="handler.noTick = !handler.noTick">Pause</button>
-            <button onclick="openMods()">Mods</button>
-            <button onclick="save()">Save</button>
-            <button onclick="load()">Load</button>
-            <button onclick="canvas.radius++;">+Rad</button>
-            <button onclick="canvas.radius = Math.max(canvas.radius - 1,0);">-Rad</button>
-        </section>
+        </div>
     </div>
-
-    <div class='menu'>
+    <div id="mod-loader-modal">
+        <div id="mod-loader-modal-box">
+            <div id="mod-loader-modal-header">
+                <div id="mod-loader-modal-title">Mods (Alpha!)</div>
+                <div id="mod-loader-modal-tabs" class="tab-bar">
+                    <div class="mod-loader-tab">Load Online</div>
+                    <div class="mod-loader-tab selected-group">Load from URL</div>
+                    <div class="mod-loader-tab">Manage</div>
+                </div>
+                <div id="mod-loader-modal-close-button" onclick="closeMods()">X</div>
+            </div>
+            <div id="mod-loader-modal-content">
+                <div class="mod-loader-tab-content">uploaded mods go here</div>
+                <div class="mod-loader-tab-content selected-group">
+                    <form id="mod-form" onsubmit="loadModFromForm(); return false">
+                        <p>Paste a link to a mod you've found, and put it here!</p>
+                        <input type="url" />
+                        <input type="submit" value="Load" />
+                    </form>
+                </div>
+                <div class="mod-loader-tab-content mods-list">
+                    <div class="mod example-mod">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAYJJREFUOE9NU9thwjAMlPYgMwAfCbMl+W6zCizQzkD4iFkC/toR1N6dZciH48f5JJ3Obt8/4eFmFoafG+ZYvq9DWxx0rhtm7l+/gVUIowMPA6kI8yLhucJNzv3y7CICHI4cuE+yiiWOCQmhKPUwzPz83DHXllKCKjwzUnFBcmcUVePnx07cTLuyC6UaoUULqrKwwcRw5/LYqXztvAkkQkbR0ITUtGp0fnQx3w72OWxEM5MmeSqd6lOlqpZIqMG0gqBoI8LG9ai1ajKcL/0m8SJsQsC+iIwE16N9ngojj+velqHYiL2h2LTu6x+YzYBdho0kH/0dInYxVxDikX0oNldSEd5tRJa9LiL6dDva0heI2AWihLvSDpHgME2JEuAVEOFjyadNgqcPZAS1j21ytU+Dv0hlt1cbQUDbymPpx7oIm68HZoe609tvL0MaMBrslI3nw0JHKiujZhOAq+1tVk4czaU3kZ6XE+uDyOSbw0wi8jXS3NWN7SG1FNKSkimL/Z/8AVDdA77BS/1YAAAAAElFTkSuQmCC" class="mod-icon">
+                        <div class="mod-details">
+                            <div class="mod-name">Sample Mod</div>
+                            <div class="mod-description">This mod has a 16x16 icon. It's just a sample mod, this menu isn't finished yet.</div>
+                        </div>
+                        <div class="mod-options">
+                            <input type="checkbox" class="mod-check" disabled checked />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    
+    
+    <div id="game">
+        <span class='info'>
+            N/A
+        </span>
+        <canvas id='main' style=""></canvas>
+        <canvas id='alt' style='display: none;'></canvas> <!-- why -->
 
-    <div class='buttons'>
+
+        <div class='menu2'>
+            <section>
+                <button onclick="handler.noTick = !handler.noTick">Pause/Play</button>
+                <button onclick="openMods()">Mods</button>
+                <button onclick="save()">Save</button>
+                <button onclick="load()">Load</button>
+                <!-- <button onclick="upload()">Upload (TODO)</button> - HEY! Please add this. Prompt() for title, I dunno. For a site like this, I feel like allowing anonymous posting is a good idea. -->
+                <label for="tile-radius">Radius:</label>
+                <input type="range" min="1" max="20"
+                        oninput="canvas.radius = Number(this.value);"
+                        onmousedown="canvas.forceShowTilePlacement = true; canvas.radius = Number(this.value)"
+                        onmouseup="canvas.forceShowTilePlacement = false"/> <!-- TODO: automatically change range value -->
+                        
+                <button onclick="clearEverything()">Clear</button> <!-- TODO: add clear function (i do not know how to do that) -->
+            </section>
+        </div>
+
+        <div class='menu tab-bar'>
+        </div>
+
+        <div class='buttons'>
+        </div>
+        
     </div>
-
-    <textarea id='code'>
-        (save data here)
-    </textarea>
-
     <!-- Core code -->
     <script src="js/tile.js"></script>
     <script src="js/event.js"></script>

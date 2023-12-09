@@ -1,10 +1,13 @@
+@import url("./fonts.css");
+
 body {
-    font-family: monospace;
+    font-family: "Ubuntu Mono";
     padding: 10px;
     margin: 0;
     background: rgb(21, 21, 22);
     color: white;
     text-align: center;
+    user-select: none;
 }
 
 #no-overflow {
@@ -16,6 +19,7 @@ canvas {
     display: block;
     background: rgb(181, 204, 253);
     image-rendering: pixelated;
+    border-radius: 10px;
 }
 
 #main2 {
@@ -27,7 +31,7 @@ canvas {
 }
 
 button, a, textarea {
-    padding: 5px;
+    padding: 5px 10px;
     border: none;
     margin: 6px 3px 0px 3px;
 
@@ -36,9 +40,254 @@ button, a, textarea {
     background: rgb(44, 142, 255);
     color: white;
 
-    font-family: monospace;
+    font-family: inherit;
+    border-radius: 6px;
+    font-size: 17px;
+    cursor: pointer;
 }
 
-section:target button, .menu2 button, a, textarea {
+section.selected-group button, .menu2 button, a, textarea {
     display: inline-block;
 }
+div#header-title {
+    font-size: 23px;
+}
+
+#header-links a {
+    margin-top: 0;
+    background: none;
+}
+
+#header {
+    padding: 0 8px;
+    margin-bottom: 32px;
+}
+#header {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+.menu, .menu2, .buttons > .selected-group {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--canvasWidth);
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.buttons {
+    background: #7b7b7b;
+    border-radius: 0 0 5px 5px;
+    overflow-y: auto;
+}
+.buttons > .selected-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    height: 100px;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.menu    a,
+.menu2   a {
+    width: 100%;
+    text-decoration: none;
+}
+.buttons button {
+    width: calc(25% - 6px);
+}
+
+.tab-bar > * {
+    background: #616161;
+    margin: 0;
+    margin-top: 8px;
+    border-radius: 10px 10px 0 0;
+    padding: 8px 10px;
+    width: 100%;
+    cursor: pointer;
+}
+.tab-bar > .selected-group {
+    background: #7b7b7b;
+}
+
+#game {
+    position: relative;
+    left: 50vw;
+    transform: translateX(-50%);
+}
+.info {
+    height: 20px;
+    display: block;
+}
+
+
+/* Mod Loader */
+
+#mod-loader-modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: #000a;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    opacity: 1;
+    transition: opacity 0.25s ease-in-out;
+}
+
+#mod-loader-modal-box {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(800px, 75vw);
+    background: #7b7b7b;
+    border-radius: 10px;
+    font-size: 0;
+    transition: transform 0.25s ease-in-out;
+    overflow: hidden;
+}
+#mod-loader-modal:not(.opened) {
+    opacity: 0;
+    pointer-events: none;
+}
+#mod-loader-modal:not(.opened) #mod-loader-modal-box {
+    transform: translate(-50%, -50%) scaleY(0);
+}
+
+#mod-loader-modal-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    height: 28px;
+    align-items: center;
+    position: relative;
+    background: #3b3b3b;
+}
+
+.tab-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+#mod-loader-modal-title {
+    flex: none;
+}
+#mod-loader-modal-close-button {
+    background: gray;
+    padding: 6px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.mod-loader-tab-content:not(.selected-group) {
+    display: none;
+}
+
+#mod-form {
+    
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    
+}
+
+#mod-loader-modal-content {
+    height: min(500px, 75vh);
+    overflow-y: auto;
+}
+
+#mod-loader-modal-box > * > * {
+    font-size: 16px;
+}
+
+#mod-loader-modal-tabs {
+  /* margin: 0 29px; */
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+}
+
+
+/* Mods */
+
+.mods-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    align-content: flex-start;
+    flex-direction: row;
+}
+
+.mod {
+    display: inline-flex;
+    --margin: 10px;
+    width: calc(50% - (var(--margin) * 2));
+    height: 96px;
+    box-sizing: border-box;
+    border: 5px solid darkgray;
+    background: lightgray;
+    color: #555;
+    padding: 8px;
+    margin: 10px;
+    justify-content: space-between;
+}
+
+.mod-icon {
+    aspect-ratio: 1 / 1;
+    flex: none;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+.mod-details > * {
+    text-align: left;
+    margin: 0 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+}
+
+.mod-loader-tab-content {
+    /* padding: 10px; */
+    box-sizing: border-box;
+}
+
+.mod-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 68%;
+    overflow: hidden;
+}
+
+.mod-name {
+    color: #111;
+    font-size: 20px;
+    /* white-space: nowrap; */
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+}
+
+.mod-options {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+}
+

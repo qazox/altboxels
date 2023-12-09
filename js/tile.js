@@ -55,13 +55,23 @@ TileManager.prototype.loadSet = function (namespace, tiles) {
 
     let elem = document.createElement('a');
     elem.textContent = namespace;
-    elem.href = `#${namespace}`
+    //elem.href = `#${namespace}`
+    //elem.id = namespace
+    
     this.row.appendChild(elem);
 
     let elem2 = document.createElement('section');
     elem2.id = namespace
     this.row2.appendChild(elem2);
-
+    
+    elem.onclick = function(e) {
+        
+        document.querySelectorAll("#game .selected-group").forEach(function(e) {e.classList.remove("selected-group")})
+        e.target.classList.add("selected-group");
+        elem2.classList.add("selected-group");
+        
+    }
+    
 
     for (let tile of tiles) {
         tile.namespace = namespace;
