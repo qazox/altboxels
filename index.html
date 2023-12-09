@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Metadata -->
+    <title>Altboxels</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+        name="description" 
+        content="Altboxels is a pixel sandbox game that enables anyone to empower their imagination. It shares many characteristics with Sandboxels, the Powder Toy, among other games in the genre. Many features are custom-built, including the physics engine!"
+    >
+    <meta name="keywords" content="sandbox, falling sand, powder toy">
+    <meta name="author" content="qazox">
+    <link rel="stylesheet" href="css/core.css">
+</head>
+
+<body>
+    <h1>Altboxels</h1>
+    <canvas id='main' style=""></canvas>
+    <canvas id='alt' style='display: none;'></canvas>
+
+    <span class='info'>
+        N/A
+    </span>
+
+    <div class='menu2'> 
+        <section>
+            <a href='https://discord.gg/wtBVte4Syu'>Chat</a>
+            <a href='https://github.com/qazox/altboxels'>Source</a>
+            <a href='https://altboxels.qazox.dev/'>Website</a>
+            <a href='https://abc.qazox.dev/'>Community</a>
+        </section>
+        <section>
+            <button onclick="handler.noTick = !handler.noTick">Pause</button>
+            <button onclick="openMods()">Mods</button>
+            <button onclick="save()">Save</button>
+            <button onclick="load()">Load</button>
+            <button onclick="canvas.radius++;">+Rad</button>
+            <button onclick="canvas.radius = Math.max(canvas.radius - 1,0);">-Rad</button>
+        </section>
+    </div>
+
+    <div class='menu'>
+    </div>
+
+    <div class='buttons'>
+    </div>
+
+    <textarea id='code'>
+        (save data here)
+    </textarea>
+
+    <!-- Core code -->
+    <script src="js/tile.js"></script>
+    <script src="js/event.js"></script>
+
+    <!-- Tile modifiers -->
+    <script src="js/gravity.js"></script>
+    <script src="js/cohesion.js"></script>
+    <script src="js/combine.js"></script>
+    <script src="js/conway.js"></script>
+    <script src="js/temperature.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/clone.js"></script>
+
+    <!-- Tile sets -->
+    <script src="js/core_blocks.js"></script>
+
+    <!-- Game loop -->
+    <script src="js/tick_handler.js"></script>
+    <script src="js/core.js"></script>
+
+    <!-- Mod loader -->
+    <script src="js/loader.js"></script>
+
+    <!-- Save/load -->
+    <script src="js/save_load.js"></script>
+</body>
+
+</html>

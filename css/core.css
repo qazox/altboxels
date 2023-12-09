@@ -1,0 +1,44 @@
+body {
+    font-family: monospace;
+    padding: 10px;
+    margin: 0;
+    background: rgb(21, 21, 22);
+    color: white;
+    text-align: center;
+}
+
+#no-overflow {
+    overflow: hidden;
+}
+
+canvas {
+    margin: auto;
+    display: block;
+    background: rgb(181, 204, 253);
+    image-rendering: pixelated;
+}
+
+#main2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+}
+
+button, a, textarea {
+    padding: 5px;
+    border: none;
+    margin: 6px 3px 0px 3px;
+
+    display: none;
+
+    background: rgb(44, 142, 255);
+    color: white;
+
+    font-family: monospace;
+}
+
+section:target button, .menu2 button, a, textarea {
+    display: inline-block;
+}
