@@ -28,10 +28,7 @@ function temperature(event, conduct, transfer = 0) {
             let conduct2 = (blok != -1) ? (mainTiles.tiles[blok].attributes.conduct || 0) : 0;
 
             let conductSum = Math.min(conduct * conduct2 * 10, 0.5);
-            let s = conductSum*(temp2 - temp + transfer);
-            
-            s += temp * -0.01;
-            if (temp < -296.15 && temp2 > -296.15) s = temp2 - temp;
+            let s = conductSum*(temp2 - temp + transfer + temp * -0.01);
 
             chunks.setBlock(cx, cy, Math.max(s + temp,-296.15), true);
             chunks.setBlock(cx+x, cy+y, Math.max(temp2 - s,-296.15), true);

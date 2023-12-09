@@ -20,7 +20,7 @@ mainTiles.loadSet(
             .state(['Vanilla/Air', 'Plasma'],3000,true),
 
         new Tile('rgb(0,0,0)', 'Vacuum').gravity(0.01 / 1000 / 1000, 4, Infinity)
-            .temperature(-269.15,0),
+            .temperature(-296.15,0),
 
         new Tile('rgb(180,156,229)', 'Hydrogen').gravity(0.8 / 1000, 4,  200) //H2
             .temperature(0,0.1)
