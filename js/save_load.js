@@ -4,7 +4,7 @@
     Features a somewhat efficient compression algorithm.
 */
 
-function download_file(data, filename) {
+function downloadFile(data, filename) {
     // ONLY works with ascii/latin1 characters. if you'd like to be able to download UTF-16 data (for compression, etc), please find a base64-encoding library for UTF-16, and replace "btoa".
     
     let a = document.createElement("a");
@@ -15,7 +15,7 @@ function download_file(data, filename) {
     
 }
 
-function upload_file(options = {}) {
+function uploadFile(options = {}) {
     base64_output = Boolean(options.useBase64);
     textEncoding = options.textEncoding ? options.textEncoding : "UTF-8";
     
@@ -90,54 +90,58 @@ function save() {
         };
     }
     
-    download_file(JSON.stringify(jason), "game-data.json");
+    downloadFile(JSON.stringify(jason), "game-data.json");
+}
+
+function loadFile(text_data) {
+    let jason = JSON.parse(text_data);
+
+    let json = jason.data;
+
+    canvas.width = jason.width;
+    canvas.height = jason.height;
+    canvas.resize();
+    
+    let mainPal = jason.pal.map(x => mainTiles.resolveID(x[0],x[1]));
+
+    console.log(mainPal);
+
+    for (let i in json) {
+        let data = json[i];
+        let pal = data.pal;
+        let dat = new TextEncoder('ascii').encode(data.dat);
+
+        let otherArray = new Uint16Array(128);
+
+        if (pal.length < 2) {
+            for (let i in otherArray) {
+                otherArray[i] =  mainPal[(pal[0])];
+            }
+            
+        } else if (pal.length < 9) {
+            for (let i in dat) {
+                otherArray[i*2] = mainPal[pal[((dat[i] - 'A'.charCodeAt()) & 0x38) / 8]];
+                otherArray[i*2+1] =  mainPal[pal[(dat[i] - 'A'.charCodeAt()) & 0x7]];
+            }
+            
+        } else {
+            for (let i in dat) {
+                otherArray[i] =  mainPal[pal[(dat[i] - 'A'.charCodeAt()) & 0x7F]];
+            }
+        }
+
+        canvas.blocks.set(otherArray,Math.min(i*128,canvas.blocks.length - 128));
+    }
+
+    for (let i in canvas.temp) {
+        canvas.temp[i] = mainTiles.tiles[canvas.blocks[i]].attributes.temperature;
+    }
 }
 
 function load() {
-    upload_file().then((text_data) => {
+    uploadFile().then((text_data) => {
         try {
-            let jason = JSON.parse(text_data);
-
-            let json = jason.data;
-
-            canvas.width = jason.width;
-            canvas.height = jason.height;
-            canvas.resize();
-            
-            let mainPal = jason.pal.map(x => mainTiles.resolveID(x[0],x[1]));
-
-            console.log(mainPal);
-
-            for (let i in json) {
-                let data = json[i];
-                let pal = data.pal;
-                let dat = new TextEncoder('ascii').encode(data.dat);
-
-                let otherArray = new Uint16Array(128);
-
-                if (pal.length < 2) {
-                    for (let i in otherArray) {
-                        otherArray[i] =  mainPal[(pal[0])];
-                    }
-                    
-                } else if (pal.length < 9) {
-                    for (let i in dat) {
-                        otherArray[i*2] = mainPal[pal[((dat[i] - 'A'.charCodeAt()) & 0x38) / 8]];
-                        otherArray[i*2+1] =  mainPal[pal[(dat[i] - 'A'.charCodeAt()) & 0x7]];
-                    }
-                    
-                } else {
-                    for (let i in dat) {
-                        otherArray[i] =  mainPal[pal[(dat[i] - 'A'.charCodeAt()) & 0x7F]];
-                    }
-                }
-
-                canvas.blocks.set(otherArray,Math.min(i*128,canvas.blocks.length - 128));
-            }
-
-            for (let i in canvas.temp) {
-                canvas.temp[i] = mainTiles.tiles[canvas.blocks[i]].attributes.temperature;
-            }
+            loadFile(text_data);
         } catch(err) {
             alert("This save file is invalid! Please provide a JSON file, with Altboxels save data.")
         }
@@ -153,7 +157,7 @@ var loc2;
 
 if (loc) {
     (async function() {
-        document.querySelector('#code').value = await fetch(loc).then(x => x.text());
+        loadFile(await fetch(loc).then(x => x.text()));
         load();
         loc2 = loc3;
     })()
